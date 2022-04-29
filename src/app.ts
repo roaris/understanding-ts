@@ -1,17 +1,10 @@
-let appId = 'abc';
-const button = document.querySelector('button')!;
+class Department {
+  name: string;
 
-function add(n1: number, n2: number) {
-  if (n1 + n2 > 0) {
-    return n1 + n2;
+  constructor(n: string) {
+    this.name = n;
   }
-  return;
 }
 
-function clickHandler(message: string) {
-  // let userName = 'Max';
-  console.log('Clicked! ' + message);
-}
-
-// a comment
-button.addEventListener('click', clickHandler.bind(null, 'welcome'));
+const accounting = new Department('Accounting');
+console.log(accounting);
