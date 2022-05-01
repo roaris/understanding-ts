@@ -12,3 +12,6 @@ function add(a, b) {
 }
 var result = add('Hello ', 'TypeScript');
 result.split(' ');
+var userInput = '';
+var storeData = userInput !== null && userInput !== void 0 ? userInput : 'DEFAULT';
+console.log(storeData);

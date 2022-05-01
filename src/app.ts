@@ -37,6 +37,12 @@ function add(a: Combinable, b: Combinable) {
 const result = add('Hello ', 'TypeScript');
 result.split(' ');
 
+const userInput = '';
+
+const storeData = userInput ?? 'DEFAULT';
+
+console.log(storeData);
+
 // type UnknownEmployee = Employee | Admin;
 
 // function printEmployeeInformation(emp: UnknownEmployee) {
