@@ -61,3 +61,7 @@ function moveAnimal(animal) {
     console.log('移動速度: ' + speed);
 }
 moveAnimal({ type: 'bird', flyingSpeed: 10 });
+var userInputElement = document.getElementById('user-input');
+if (userInputElement) {
+    userInputElement.value = 'こんにちは';
+}
