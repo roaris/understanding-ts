@@ -65,3 +65,7 @@ var userInputElement = document.getElementById('user-input');
 if (userInputElement) {
     userInputElement.value = 'こんにちは';
 }
+var errorBag = {
+    email: '正しいメールアドレスではありません',
+    username: 'ユーザ名に記号を含めることはできません',
+};
