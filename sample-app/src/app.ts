@@ -30,10 +30,10 @@ class Project {
 type Listener<T> = (items: T[]) => void;
 
 class State<T> {
-  protected listenrs: Listener<T>[] = [];
+  protected listeners: Listener<T>[] = [];
 
   addListener(listenerFn: Listener<T>) {
-    this.listenrs.push(listenerFn);
+    this.listeners.push(listenerFn);
   }
 }
 
@@ -56,7 +56,19 @@ class ProjectState extends State<Project> {
   addProject(title: string, description: string, manday: number) {
     const newProject = new Project(Math.random().toString(), title, description, manday, ProjectStatus.Active);
     this.projects.push(newProject);
-    for (const listenerFn of this.listenrs) {
+    this.updateListeners();
+  }
+
+  moveProject(projectId: string, newStatus: ProjectStatus) {
+    const project = this.projects.find((prj) => prj.id == projectId);
+    if (project && project.status !== newStatus) {
+      project.status = newStatus;
+      this.updateListeners();
+    }
+  }
+
+  private updateListeners() {
+    for (const listenerFn of this.listeners) {
       listenerFn(this.projects.slice());
     }
   }
@@ -198,8 +210,13 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> implements Drag
     }
   }
 
+  @autobind
   dropHandler(event: DragEvent) {
-    console.log(event.dataTransfer!.getData('text/plain'));
+    const prjId = event.dataTransfer!.getData('text/plain');
+    projectState.moveProject(prjId, this.type === 'active' ? ProjectStatus.Active : ProjectStatus.Finished);
+
+    const listEl = this.element.querySelector('ul')!;
+    listEl.classList.remove('droppable');
   }
 
   @autobind

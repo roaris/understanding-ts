@@ -21,10 +21,10 @@ class Project {
 }
 class State {
     constructor() {
-        this.listenrs = [];
+        this.listeners = [];
     }
     addListener(listenerFn) {
-        this.listenrs.push(listenerFn);
+        this.listeners.push(listenerFn);
     }
 }
 class ProjectState extends State {
@@ -42,7 +42,17 @@ class ProjectState extends State {
     addProject(title, description, manday) {
         const newProject = new Project(Math.random().toString(), title, description, manday, ProjectStatus.Active);
         this.projects.push(newProject);
-        for (const listenerFn of this.listenrs) {
+        this.updateListeners();
+    }
+    moveProject(projectId, newStatus) {
+        const project = this.projects.find((prj) => prj.id == projectId);
+        if (project && project.status !== newStatus) {
+            project.status = newStatus;
+            this.updateListeners();
+        }
+    }
+    updateListeners() {
+        for (const listenerFn of this.listeners) {
             listenerFn(this.projects.slice());
         }
     }
@@ -147,7 +157,10 @@ class ProjectList extends Component {
         }
     }
     dropHandler(event) {
-        console.log(event.dataTransfer.getData('text/plain'));
+        const prjId = event.dataTransfer.getData('text/plain');
+        projectState.moveProject(prjId, this.type === 'active' ? ProjectStatus.Active : ProjectStatus.Finished);
+        const listEl = this.element.querySelector('ul');
+        listEl.classList.remove('droppable');
     }
     dragLeaveHandler(_) {
         const listEl = this.element.querySelector('ul');
@@ -184,6 +197,9 @@ class ProjectList extends Component {
 __decorate([
     autobind
 ], ProjectList.prototype, "dragOverHandler", null);
+__decorate([
+    autobind
+], ProjectList.prototype, "dropHandler", null);
 __decorate([
     autobind
 ], ProjectList.prototype, "dragLeaveHandler", null);
